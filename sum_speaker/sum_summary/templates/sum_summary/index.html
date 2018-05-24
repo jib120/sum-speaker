@@ -1,81 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends 'sum_summary/layout.html' %}
 
-<head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="author" content="Colorlib">
-    <meta name="description" content="#">
-    <meta name="keywords" content="#">
-    {% load static %}
-    <!-- Page Title -->
-    <title>기사요약 음성지원 Sum Speaker</title>
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}?v=1"/>
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,500,700,900" rel="stylesheet">
-    <!-- Simple line Icon -->
-    <link rel="stylesheet" href="{% static 'css/simple-line-icons.css' %}">
-    <!-- Themify Icon -->
-    <link rel="stylesheet" href="{% static 'css/themify-icons.css' %}">
-    <!-- Hover Effects -->
-    <link rel="stylesheet" href="{% static 'css/set1.css' %}">
-    <!-- Main CSS -->
-    <link rel="stylesheet" href="{% static 'css/style.css' %}?v=3">
-</head>
-
-<body>
-   <!-- <div class="container">
-        <table class ="table">
-            <thead>
-                <tr>
-                    <td><b>이름</b></td>
-                    <td><b>소개</b></td>
-                    <td><b>출마지역</b></td>
-                    <td><b>기호</b></td>
-                </tr>
-            </thead>
-            <tbody>
-            {% for candidate in candidates %}
-                <tr>
-                    <td>{{candidate.name}}</td>
-                    <td>{{candidate.introduction}}</td>
-                    <td>{{candidate.area}}</td>
-                    <td>{{candidate.party_number}}</td>
-                </tr>
-            {% endfor%}
-            </tbody>
-        </table>
-    </div> -->
-    <!--============================= HEADER =============================-->
-    <div class="dark-bg sticky-top">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-md-12">
-                    <nav class="navbar navbar-expand-lg navbar-light">
-                        <a class="navbar-brand" href="index.html">Sum Speaker</a>
-                        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-              <span class="icon-menu"></span>
-            </button>
-                        <div class="collapse navbar-collapse justify-content-end" id="navbarNavDropdown">
-                            <ul class="navbar-nav">
-                                <li class="nav-item active">
-                                    <a class="nav-link" href="search/view.html">즐겨찾기</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="info/login.html">로그인</a>
-                                </li>
-                            </ul>
-                        </div>
-                    </nav>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!--//END HEADER -->
-    <!-- SLIDER -->
+{% block content %}
     <section class="slider d-flex align-items-center">
         <!-- <img src="images/slider.jpg" class="img-fluid" alt="#"> -->
         <div class="container">
@@ -126,7 +51,6 @@
                         <div class="col-md-3 category-responsive">
                             <a href="javascript:MoveToView('{{candidate.name}}');" class="category-wrap">
                                 <div class="category-block">
-                                    <!--<img class="category-img" src="{% static 'images/number_2.png'%}">-->
                                  <h6>{{candidate.name}}</h6>
                                 </div>
                           </a>
@@ -136,62 +60,4 @@
         </div>
     </section>
     <!--//END CATEGORIES -->
-    <!--============================= FOOTER =============================-->
-    <footer class="main-block dark-bg">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="copyright">
-                        <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-                        <p>Copyright &copy; 2018 Listing. All rights reserved <i class="ti-heart" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Sum Speaker</a></p>
-                        <ul>
-                            <li><a href="#"><span class="ti-facebook"></span></a></li>
-                            <li><a href="#"><span class="ti-twitter-alt"></span></a></li>
-                            <li><a href="#"><span class="ti-instagram"></span></a></li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </footer>
-    <!--//END FOOTER -->
-    <!-- jQuery, Bootstrap JS. -->
-    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
-    <scripzt src="{% static 'js/popper.min.js' %}"></scripzt>
-    <script src="{% static 'js/bootstrap.min.js' %}"></script>
-   <script type="text/javascript">
-    $(document).ready(function() {
-        $(window).scroll(function() {
-            // 100 = The point you would like to fade the nav in.
-            if ($(window).scrollTop() > 100)
-                $('.fixed').addClass('is-sticky');
-            else
-                $('.fixed').removeClass('is-sticky');
-        });
-
-        function trim(str) {
-            return str.replace(/(^\s*)|(\s*$)/gi, "");
-        }
-
-        $('.btn-group .btn-form').click(function(e){
-            e.preventDefault();
-            input_value = trim($('input.btn-group1').val());
-            if(input_value==""){
-                alert("keyword를 입력해주세요.");
-                return false;
-            }
-
-            confirm_keyword = confirm("입력하신 keyword가 정확합니까?");
-            if(confirm_keyword == true){
-                MoveToView(input_value);
-             }
-        });
-    });
-    //TOP KEYWORD view로 이동
-    function MoveToView(keyword){
-        location.href="search/view.html?keyword="+escape(keyword);
-    }
-   </script>
-</body>
-</html>
+{% endblock content %}

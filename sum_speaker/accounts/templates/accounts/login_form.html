@@ -1,0 +1,21 @@
+{% extends 'sum_summary/layout.html' %}
+
+{% block content %}
+
+
+<form class="form-signin" action="" method="post">
+        <div class="container">
+                <div class="row">
+                    <div class="col-md-8 responsive-wrap">
+                        <div class="booking-checkbox_wrap mt-4">
+                        {% csrf_token %}
+                        <table  class="form-control" >
+                            {{ form.as_table}}
+                        </table>
+                        <input class="btn btn-primary btn-block"  type="submit">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+{% endblock content %}
