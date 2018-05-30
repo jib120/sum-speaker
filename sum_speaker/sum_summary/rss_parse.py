@@ -4,7 +4,7 @@ import newspaper
 
 import time
 import sys
-# import re
+import re
 # from time import sleep
 import jpype
 
@@ -80,7 +80,11 @@ def gather_rss(keyword, max_count=20):
             # text = re.sub("(\[.*기자\])", '', text)
 
             text_summary = summarize_text(text)
-            yield text_summary, e['link'], e['title'], e['author']
+
+            # 제목에서 [포토], [사진] 등의 문구 제거
+            title = re.sub("\[.*\]", '', e['title'])
+
+            yield text_summary, e['link'], title, e['author']
 
         except:
             continue

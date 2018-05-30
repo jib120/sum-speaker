@@ -69,7 +69,7 @@ def search(request):
     context = {
         'Keywords' : keywords,
         'current_keyword' : current_keyword,
-        'Keywords_max' : len(keywords)
+        'Keywords_len' : len(keywords)
     }
 
     return render(request, 'sum_summary/view.html', context)
