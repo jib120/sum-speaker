@@ -10,8 +10,8 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="slider-content_wrap">
-                                    <h1>How to summarize articles</h1>
-                                    <h5>We are good. we are the Sum-Speaker</h5>
+                                    <!--<h1>How to summarize articles</h1>-->
+                                    <h5>summarizes text to save you time </h5>
                                 </div>
                             </div>
                         </div>
@@ -19,7 +19,7 @@
                             <div class="col-md-10">
                                 <form class="form-wrap mt-4">
                                     <div class="btn-group" role="group" aria-label="Basic example">
-                                        <input type="text" placeholder="What are your looking for?" class="btn-group1">
+                                        <input type="text" placeholder="원하는 키워드를 입력하세요" class="btn-group1">
                                         <!--<input type="text" placeholder="New york" class="btn-group2">-->
                                         <button class="btn-form" >
                                             <span class="icon-magnifier search-icon"></span>SEARCH
@@ -42,16 +42,16 @@
             <div class="row justify-content-center">
                 <div class="col-md-5">
                     <div class="styled-heading">
-                        <h3>Popluar Keywords</h3>
+                        <h3>실시간 검색어 TOP 12</h3>
                     </div>
                 </div>
             </div>
             <div class="row">
-                {%  for candidate in candidates %}
+                {%  for name in top10 %}
                         <div class="col-md-3 category-responsive">
                             <a href="javascript:MoveToView('{{candidate.name}}');" class="category-wrap">
                                 <div class="category-block">
-                                 <h6>{{candidate.name}}</h6>
+                                 <h6>{{name}}</h6>
                                 </div>
                           </a>
                         </div>

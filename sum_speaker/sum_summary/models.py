@@ -1,5 +1,6 @@
 from django.db import models
 from datetime import datetime
+from .naver_collections import show_top_issue
 
 # Create your models here.
 class Member(models.Model):

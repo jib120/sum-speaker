@@ -1,10 +1,12 @@
 #sum_summary/views.py
 
 from django.shortcuts import render
+from sum_summary.naver_collections import show_top_issue
 from django.shortcuts import redirect
 
 from django.http import HttpResponse
-from .models import Candidate,Member,Keyword
+
+from sum_summary.models import Candidate,Member,Keyword
 
 import urllib
 import time
@@ -17,10 +19,8 @@ import html
 from .rss_parse import gather_rss
 
 def index(request):
-    candidates = Candidate.objects.all() #해당 테이블에 모든 row를 다 불러온다.
-    context = {'candidates' : candidates,
-                'candidate_len': len(candidates),
-                }
+    top10 = show_top_issue()
+    context = {'top10' : top10}
     return render(request, 'sum_summary/index.html', context)
 
 
@@ -34,6 +34,7 @@ def unescape(s):
     #return html.unescape(s)
     s_utf8 = bytes(s, 'utf-8')
     return ''.join(["\\u%04x" % (ord(c)) for c in s_utf8])
+
 
 def search(request):
 
@@ -73,4 +74,4 @@ def search(request):
     }
 
     return render(request, 'sum_summary/view.html', context)
-
+  
