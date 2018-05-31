@@ -24,9 +24,7 @@
     <link rel="stylesheet" href="{% static 'css/set1.css' %}">
     <!-- Main CSS -->
     <link rel="stylesheet" href="{% static 'css/style.css' %}?v=6">
-
 </head>
-
 <body>
     <div class="dark-bg sticky-top">
         <div class="container-fluid">
@@ -60,6 +58,26 @@
     {% block content %}
     
     {% endblock content %}
+    <!--============================= FOOTER =============================-->
+    <footer class="main-block dark-bg">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="copyright">
+                        <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+                        <p>Copyright &copy; 2018 Listing. All rights reserved <i class="ti-heart" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Sum Speaker</a></p>
+                        <ul>
+                            <li><a href="#"><span class="ti-facebook"></span></a></li>
+                            <li><a href="#"><span class="ti-twitter-alt"></span></a></li>
+                            <li><a href="#"><span class="ti-instagram"></span></a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <!--//END FOOTER -->
+
     <!-- jQuery, Bootstrap JS. -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
@@ -95,26 +113,8 @@
     });
     //TOP KEYWORD view로 이동
     function MoveToView(keyword){
-        location.href="search/view.html?keyword="+escape(keyword);
+        location.href="search/view.html?keyword="+keyword;
     }
    </script>
-    <!--============================= FOOTER =============================-->
-    <footer class="main-block dark-bg">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="copyright">
-                        <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-                        <p>Copyright &copy; 2018 Listing. All rights reserved <i class="ti-heart" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Sum Speaker</a></p>
-                        <ul>
-                            <li><a href="#"><span class="ti-facebook"></span></a></li>
-                            <li><a href="#"><span class="ti-twitter-alt"></span></a></li>
-                            <li><a href="#"><span class="ti-instagram"></span></a></li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </footer>
 </body>
 </html>
