@@ -21,6 +21,9 @@ class Candidate(models.Model):
 class Keyword(models.Model):
     id = models.IntegerField(primary_key=True)
     keyword = models.CharField(max_length=20)
+    link = models.TextField(max_length=255)
+    title = models.TextField(max_length=255)
+    author = models.TextField(max_length=20)
     summary = models.TextField()
     reg_date = models.DateTimeField(default=datetime.now(), blank=True)
 
