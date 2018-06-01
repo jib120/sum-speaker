@@ -16,7 +16,7 @@ import html
 
 #from django.core.exceptions import ObjectDoesNotExist
 
-from .rss_parse import gather_rss
+from .rss_parse import gather_rss_async
 
 def index(request):
     top10 = show_top_issue()
@@ -51,7 +51,7 @@ def search(request):
     else:
         #print(urllib.parse.unquote(current_keyword))
 
-        for summary, link, title, author in gather_rss(current_keyword, KEYWORD_MAX_COUNT):
+        for summary, link, title, author in gather_rss_async(current_keyword, KEYWORD_MAX_COUNT):
             obj, created = Keyword.objects.get_or_create(
                 # unique key temporary
                 id = int(time.time() * 100000),
