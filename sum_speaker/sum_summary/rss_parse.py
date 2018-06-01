@@ -16,6 +16,8 @@ import jpype
 
 from textrankr import TextRank
 
+import asyncio
+
 # workaround preloading kkma in konlpy
 # kkma 형태소 분석기 로딩이 엄청 오래 걸림... ( 10초? )
 #########################################
@@ -39,7 +41,6 @@ def summarize_text(text):
 
     _textrank = TextRank(text)
     return _textrank.summarize()
-
 
 def gather_rss(keyword, max_count=20):
     url = "http://newssearch.naver.com/search.naver?where=rss&query=" \
@@ -85,17 +86,80 @@ def gather_rss(keyword, max_count=20):
             title = re.sub("\[.*\]", '', e['title'])
 
             yield text_summary, e['link'], title, e['author']
-
         except:
             continue
 
         #print(len(text))
         #print(text_summary)
 
+def get_article(e):
+    # boundary values
+    ARTICLE_SIZE_THRESHOLD = 50
+
+    try:
+        article = newspaper.Article(e['link'])
+        #loop = asyncio.get_event_loop()
+        #await loop.run_in_executor(article, download)
+        article.download()
+        # wait for a moment
+        # sleep(0.1)
+        #await loop.run_in_executor(article, parse)
+        article.parse()
+        text = article.text
+
+        # text count check : threshold 200? 400?
+        if len(text) < ARTICLE_SIZE_THRESHOLD:
+            return ()
+
+        # remove absent lines
+        text = text.replace('\n\n', '\n')
+        # text = re.sub("(\[.*기자\])", '', text)
+
+        text_summary = summarize_text(text)
+        # 제목에서 [포토], [사진] 등의 문구 제거
+        title = re.sub("\[.*\]", '', e['title'])
+
+        #yield text_summary, e['link'], title, e['author']
+        return text_summary, e['link'], title, e['author']
+
+    except:
+        return ()
+
+def gather_rss_async(keyword, max_count=20):
+    url = "http://newssearch.naver.com/search.naver?where=rss&query=" \
+          + urllib.request.quote(keyword)
+
+    print_with_timestamp("start rss gather !")
+    data = feedparser.parse(url)
+    print("url={}, data len={}".format(url, len(data.entries)))
+
+    keywords_list = []
+    futures = []
+
+    loop = asyncio.new_event_loop()
+    asyncio.set_event_loop(loop)
+
+    async def coroutines():
+        futures = [
+            loop.run_in_executor(
+                None,
+                get_article,
+                e
+            )
+            for e in data.entries[:10]
+        ]
+        for res in await asyncio.gather(*futures):
+            if res:
+                keywords_list.append(res)
+
+    loop.run_until_complete(coroutines())
+
     print_with_timestamp("end rss gather - {}!".format(max_count))
+    return keywords_list
 
 if __name__ == "__main__":
     for t in gather_rss(sys.argv[1]):
         print(t)
+
 
 
