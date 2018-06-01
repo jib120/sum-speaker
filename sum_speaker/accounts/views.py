@@ -3,7 +3,6 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from . import models
 from .forms import signupform
-from django.contrib.auth.forms import UserCreationForm
 
 # Create your views here.
 

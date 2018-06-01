@@ -1,19 +1,124 @@
 {% extends 'sum_summary/layout.html' %} 
 
+
 {% block content %}
-<div class="container">
-        <div class="row">
-            <div class="col-md-8 responsive-wrap">
-            <div class="booking-checkbox_wrap mt-4">
-                <form action="" method="post">
-                    {% csrf_token %}
-                    <table>
-                        {{form.as_table}}
-                    </table>
-                    <input class="btn btn-primary btn-block" type="submit">
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
+<script>
+        // When the user clicks on <div>, open the popup
+        function myFunction() {
+            var popup = document.getElementById("myPopup");
+            popup.classList.toggle("show");
+        }
+</script>
+<style>
+        @CHARSET "UTF-8";
+    
+        * {
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            box-sizing: border-box;
+            outline: none;
+        }
+    
+        .login-form {
+            margin: 100px auto;
+            max-width: 400px;
+        }
+    
+        form[role=login] {
+            color: #5d5d5d;
+            background: #f2f2f2;
+            padding: 26px;
+            border-radius: 10px;
+            -moz-border-radius: 10px;
+            -webkit-border-radius: 10px;
+        }
+    
+        form[role=login] img {
+            display: block;
+            margin: 0 auto;
+            margin-bottom: 35px;
+        }
+    
+        form[role=login] input,
+        form[role=login] button {
+            font-size: 18px;
+            margin: 16px 0;
+        }
+    
+        form[role=login]>div {
+            text-align: center;
+        }      
+        .popup {
+            position: relative;
+            display: inline-block;
+            cursor: pointer;
+        }
+        
+        /* The actual popup (appears on top) */
+        .popup .popuptext {
+            font-size: 11px;
+            visibility: hidden;
+            width: 350px;
+            background-color: #555;
+            color: #fff;
+            text-align: left;
+            border-radius: 6px;
+            padding: 3px 0;
+            position: absolute;
+            z-index: 2;
+            bottom: 125%;
+            left: 100%;
+        }
+        
+        /* Popup arrow */
+        .popup .popuptext::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: #555 transparent transparent transparent;
+        }
+        
+        /* Toggle this class when clicking on the popup container (hide and show the popup) */
+        .popup .show {
+            visibility: visible;
+            -webkit-animation: fadeIn 1s;
+            animation: fadeIn 1s
+        }
+        
+        /* Add animation (fade in the popup) */
+        @-webkit-keyframes fadeIn {
+            from {opacity: 0;} 
+            to {opacity: 1;}
+        }
+        
+        @keyframes fadeIn {
+            from {opacity: 0;}
+            to {opacity:1 ;}
+        }  
+</style>
+
+
+<section class="container">
+        <section class="login-form">
+            <form class="form-signin" method="post" action="" role="login">
+                {% csrf_token %}
+                <h3>Register</h3>
+                <h5>Create an account.</h5>
+                <div class="popup" onclick="myFunction()">
+                <span class="popuptext" id="myPopup"><li>Username <br>Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only.</li><li>Password <br>Your password can&#39;t be too similar to your other personal information.<br>Your password must contain at least 8 characters.<br>Your password can&#39;t be a commonly used password.<br>Your password can&#39;t be entirely numeric.</span>
+                 </div>
+                <!--<img src="\images\logo.png" class="img-responsive" alt="" /> -->
+                <input type="username" onclick="myFunction()" name="username" placeholder="Username" required class="form-control input-lg" />
+                <input type="email" name="email" placeholder="Email" required class="form-control input-lg" />
+                <input type="password" name="password1" placeholder="Password" required class="form-control input-lg" />
+                <input type="password" name="password2" placeholder="Retype Password" required class="form-control input-lg" />
+                <button type="submit" name="go" class="btn btn-lg btn-primary btn-block">Register</button>
+            </form>
+    </section>  
+</section>
+
 {% endblock content %}
