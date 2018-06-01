@@ -41,7 +41,7 @@ def search(request):
     KEYWORD_MAX_COUNT = 10
 
     current_keyword = request.GET.get('keyword')
-    print(current_keyword)
+    #print(current_keyword)
 
     # Check caching data in database about keyword
     keywords = Keyword.objects.filter(keyword=current_keyword).order_by('reg_date')[:20]
