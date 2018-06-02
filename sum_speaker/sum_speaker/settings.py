@@ -26,7 +26,7 @@ SECRET_KEY = 'm9y0zoyda5sax+1br5+7#sj0lk$-tmsi^%&d)i6c%307$&^gwg'
 #DEBUG = False
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['125.131.73.161', '127.0.0.1', 'localhost']
 
 
 # Application definition
@@ -134,8 +134,8 @@ STATICFILES_DIRS = (
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.naver.com'
 EMAIL_PORT = 587
-EMAIL_HOST_USER = 'jib120@naver.com'
-EMAIL_HOST_PASSWORD = 'dlsqhr@ek'
+EMAIL_HOST_USER = 'sumspeaker@naver.com'
+EMAIL_HOST_PASSWORD = 'admin1234@'
  
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 SERVER_EMAIL = EMAIL_HOST_USER
