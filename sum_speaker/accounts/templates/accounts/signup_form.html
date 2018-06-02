@@ -59,14 +59,14 @@
             font-size: 11px;
             visibility: hidden;
             width: 350px;
-            background-color: #555;
+            background-color: rgb(88, 123, 219);
             color: #fff;
             text-align: left;
             border-radius: 6px;
             padding: 3px 0;
             position: absolute;
             z-index: 2;
-            bottom: 125%;
+            bottom: 100%;
             left: 100%;
         }
         
@@ -75,7 +75,7 @@
             content: "";
             position: absolute;
             top: 100%;
-            left: 50%;
+            left: 100%;
             margin-left: -5px;
             border-width: 5px;
             border-style: solid;
@@ -108,15 +108,20 @@
                 {% csrf_token %}
                 <h3>Register</h3>
                 <h5>Create an account.</h5>
+                <h10>회원가입을 위해 아래내용을 작성해주세요.</h10></br>
                 <div class="popup" onclick="myFunction()">
-                <span class="popuptext" id="myPopup"><li>Username <br>Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only.</li><li>Password <br>Your password can&#39;t be too similar to your other personal information.<br>Your password must contain at least 8 characters.<br>Your password can&#39;t be a commonly used password.<br>Your password can&#39;t be entirely numeric.</span>
+                    <span class="popuptext" id="myPopup"><li>사용자이름 <br>필수항목. 150 150자 이하. 문자, 숫자 및 @/./+/-/_ only.</li>
+                        <li>암호 <br>암호는 다른 개인정보와 너무 비슷할 수 없습니다.<br>비밀번호는 8자 이상이어야 합니다.<br>암호는 일반적으로 사용되는 암호가 될 수 없습니다.<br>암호는 전적으로 숫자 일 수 없습니다.</span>
+                            <li>이메일 <br>비밀번호를 찾을때 사용되니 정확히 기입해 주십시오.</li>
                  </div>
                 <!--<img src="\images\logo.png" class="img-responsive" alt="" /> -->
-                <input type="username" onclick="myFunction()" name="username" placeholder="Username" required class="form-control input-lg" />
+                <input type="username"  name="username" onclick="myFunction()" placeholder="Username" required class="form-control input-lg" />
+                <input type="first_name"  name="first_name" placeholder="first_name" required class="form-control input-lg" />
+                <input type="last_name" name="last_name" placeholder="last_name" required class="form-control input-lg" />
                 <input type="email" name="email" placeholder="Email" required class="form-control input-lg" />
                 <input type="password" name="password1" placeholder="Password" required class="form-control input-lg" />
                 <input type="password" name="password2" placeholder="Retype Password" required class="form-control input-lg" />
-                <button type="submit" name="go" class="btn btn-lg btn-primary btn-block">Register</button>
+                <button type="submit" name="go" class="btn btn-lg btn-primary btn-block">등록</button>
             </form>
     </section>  
 </section>

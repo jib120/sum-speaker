@@ -25,5 +25,7 @@ def root(request):
 urlpatterns = [
     path('', include('sum_summary.urls')),
     path('admin/', admin.site.urls),
-    url(r'^accounts/', include('accounts.urls'))
+    url(r'^accounts/', include('accounts.urls')),
+    url(r'^registrations/', include('registrations.urls'))
+    
 ]
