@@ -2,19 +2,83 @@
 
 
 {% block content %}
-<div class="container">
-    <div class="row">
-        <div class="col-md-8 responsive-wrap">
-        <div class="booking-checkbox_wrap mt-4">
-            <h2>{{user}}'s profile</h2>
-            <ul>
-                <li>username : {{user.username}}</li>
-                <li>email : {{user.email}}</li>
-                <li>date_joined : {{user.date_joined}}</li>
-            </ul>
-        </div>
-    </div>
-</div>
-</div>
+<style>
+        @CHARSET "UTF-8";
+    
+        * {
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            box-sizing: border-box;
+            outline: none;
+        }
+    
+        .login-form {
+            margin: 100px auto;
+            max-width: 400px;
+        }
+    
+        form[role=login] {
+            color: #5d5d5d;
+            background: #f2f2f2;
+            padding: 26px;
+            border-radius: 10px;
+            -moz-border-radius: 10px;
+            -webkit-border-radius: 10px;
+        }
+    
+        form[role=login] img {
+            display: block;
+            margin: 0 auto;
+            margin-bottom: 35px;
+        }
+    
+        form[role=login] input,
+        form[role=login] button {
+            font-size: 18px;
+            margin: 16px 0;
+        }
+    
+        form[role=login]>div {
+            text-align: center;
+        }      
+        .popup {
+            position: relative;
+            display: inline-block;
+            cursor: pointer;
+        }
+        
+        /* The actual popup (appears on top) */
+        .popup .popuptext {
+            font-size: 11px;
+            visibility: hidden;
+            width: 350px;
+            background-color: #555;
+            color: #fff;
+            text-align: left;
+            border-radius: 6px;
+            padding: 3px 0;
+            position: absolute;
+            z-index: 2;
+            bottom: 125%;
+            left: 100%;
+        }
+</style>
+<section class="container">
+        <section class="login-form">
+            <form class="form-signin" method="post" action="" role="login">
+                    <h2>{{user}}'s profile</h2>
+                    <ul>
+                        <li>username : {{user.username}}</li>
+                        <li>email : {{user.email}}</li>
+                        <li>first_name : {{user.first_name}}</li>
+                        <li>lasat_name : {{user.last_name}}</li>
+                        <li>date_joined : {{user.date_joined}}</li>
+                        <li><a class="btn btn-primary" href="{% url "change_password" %}">reset password</a></li>
+                        <a href ="#" class="form-link">Contact us.</a>
+                    </ul>
+            </form>
+    </section>  
+</section>
+
 
 {% endblock content %}
