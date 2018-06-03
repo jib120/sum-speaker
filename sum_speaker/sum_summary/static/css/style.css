@@ -6,8 +6,12 @@ Author: Surjith S M
 /* ==============================================================
    GLOBAL STYLES
    ============================================================== */
+@import url('http://fonts.googleapis.com/earlyaccess/nanumgothic.css');
+
 body {
-  font-family: 'Roboto', sans-serif; }
+  font-family: 'Roboto', sans-serif,'Nanum Gothic'
+  ;}
+
 
 h1 {
   font-size: 65px;
@@ -15,12 +19,14 @@ h1 {
    }
   @media (max-width: 1200px) {
     h1 {
-      font-size: 52px; } }
+      font-size: 52px;
+      } }
   @media (max-width: 992px) {
     h1 {
       font-size: 40px; } }
 
 h2 {
+  color: #336633;
   font-size: 47px; }
   @media (max-width: 768px) {
     h2 {
@@ -157,7 +163,7 @@ p {
   padding: 0 8px 0 0; }
 
 .slider {
-  background: url(../images/background2.png) no-repeat;
+  background: url(../images/background4.jpg) no-repeat;
    -webkit-background-size: cover;
    -moz-background-size: cover;
    -o-background-size: cover;
@@ -628,7 +634,7 @@ footer {
     -ms-flex: 100%;
     flex: 100%; } }
 
-/* 
+/*
    BOOKING PAGE
    */
 /* ==============================================================
@@ -781,15 +787,15 @@ footer {
     text-align: center; }
 
 .customer-content-wrap {
-  padding-bottom : 10px;
+  padding-bottom : 20px;
   margin: 0 0 0 135px; }
   @media (max-width: 992px) {
     .customer-content-wrap {
-      padding-bottom : 10px;
+      padding-bottom : 20px;
       margin: 0 0 0 110px; } }
   @media (max-width: 992px) {
     .customer-content-wrap {
-      padding-bottom : 10px;
+      padding-bottom : 20px;
       margin: 0px; } }
   .customer-content-wrap ul {
     margin: 24px 0 0;
@@ -989,4 +995,16 @@ footer {
   height: 100%;
   width: 100%; }
 
+/* 20180601 css add */
+.keyword_color{
+  font-size: 45px;
+  color: #336633;
+   }
+.keyword_name{
+  font-weight: bold;
+  color: #799966;
+   }
+.lobster{
+  font-family: 'Lobster';
+}
 /*# sourceMappingURL=style.css.map */
