@@ -6,14 +6,25 @@
     <section class="reserve-block">
         <div class="container">
             <div class="col-md-6">
-                <h5>{{current_keyword}} (Keyword 이름)</h5>
+                <h5>입력하신 KEYWORD : <span class="keyword_color">{{current_keyword}}</span></h5>
             </div>
             <div class="row">
                 <div class="col-md-8">
                     <div class="reserve-seat-block">
                         <div class="reserve-btn">
                             <div class="featured-btn-wrap">
-                                <a href="#" class="btn btn-danger">즐겨찾기 등록</a>
+                            {% if user.is_authenticated %}
+                                <form action ="{% url 'bookmark_register' %}?user={{user}}" method="post">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="username" value="{{user}}">
+                                    {% for keyword in Keywords%}
+                                        <input type="hidden" name="keywords_{{forloop.counter}}" value="{{keyword.id}}">
+                                        <input type="hidden" name="result" value="{{result}}">
+                                    {% endfor %}
+                                    <button name="current_keyword" class="btn btn-danger" value="{{current_keyword}}">즐겨찾기 등록</button>
+                            {% else %}
+                                <button class="btn btn-danger register-bookmark">즐겨찾기 등록</button>
+                            {% endif %}
                             </div>
                         </div>
                     </div>
@@ -56,7 +67,18 @@
             <div class="reserve-seat-block2">
                 <div class="reserve-btn">
                     <div class="featured-btn-wrap">
-                        <a href="#" class="btn btn-danger">즐겨찾기 등록</a>
+                            {% if user.is_authenticated %}
+                                <form action ="{% url 'bookmark_register' %}?user={{user}}" method="post">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="username" value="{{user}}">
+                                    {% for keyword in Keywords%}
+                                        <input type="hidden" name="keywords_{{forloop.counter}}" value="{{keyword.id}}">
+                                        <input type="hidden" class="bookmark_register_result" name="result" value="{{result}}">
+                                    {% endfor %}
+                                    <button name="current_keyword" class="btn btn-danger" value="{{current_keyword}}">즐겨찾기 등록</button>
+                            {% else %}
+                                <button class="btn btn-danger register-bookmark">즐겨찾기 등록</button>
+                            {% endif %}
                         <a href="#" class="btn btn-danger">음성지원</a>
                     </div>
                 </div>

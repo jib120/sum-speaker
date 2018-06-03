@@ -38,3 +38,15 @@ class Images(models.Model):
 
     def __str__(self):
         return self.Images
+
+class Bookmark(models.Model):
+    id = models.AutoField(primary_key=True)
+    username = models.CharField(max_length=255)
+    keywords_id = models.TextField(max_length=255)
+    keyword = models.CharField(max_length=255)
+    status  = models.CharField(max_length=2)
+    reg_date = models.DateTimeField(default=datetime.now(), blank=True)
+    update_date = models.DateTimeField(default=datetime.now(), blank=True)
+
+    def __str__(self):
+        return self.keyword

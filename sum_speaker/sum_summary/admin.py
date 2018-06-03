@@ -1,8 +1,6 @@
 from django.contrib import admin
-from .models import Candidate, Keyword, Member, Images
+from .models import Keyword, Bookmark
 # Register your models here.
 
-admin.site.register(Candidate)
 admin.site.register(Keyword)
-admin.site.register(Member)
-admin.site.register(Images)
+admin.site.register(Bookmark)

@@ -10,8 +10,7 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="slider-content_wrap">
-                                    <!--<h1>How to summarize articles</h1>-->
-                                    <h5>summarizes text to save you time </h5>
+                                    <h5>키워드로 기사 요약과 스피커 기능을 함께</h5>
                                 </div>
                             </div>
                         </div>
@@ -48,16 +47,17 @@
             </div>
             <div class="row">
                 {%  for name in top10 %}
-                        <div class="col-md-3 category-responsive">
-                            <a href="javascript:MoveToView('{{candidate.name}}');" class="category-wrap">
-                                <div class="category-block">
-                                 <h6>{{name}}</h6>
-                                </div>
-                          </a>
+                    <div class="col-md-3 category-responsive">
+                    <a href="javascript:MoveToView('{{name}}');" class="category-wrap">
+                        <div class="category-block">
+                            <h6>{{forloop.counter}}위. <span class="keyword_name">{{name}}</span></h6>
                         </div>
+                      </a>
+                    </div>
                 {% endfor %}
             </div>
         </div>
     </section>
     <!--//END CATEGORIES -->
+
 {% endblock content %}
