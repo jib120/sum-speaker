@@ -103,13 +103,11 @@ def bookmark_register(request):
 
     obj, created = Bookmark.objects.get_or_create(keyword=current_keyword, keywords_id=keywords_id, username=username, status="1")
     obj.save()
-    result = 'success'
 
     context = {
         'Keywords'          : keywords,
         'current_keyword'  : current_keyword,
-        'Keywords_len'     : len(keywords),
-        'result'            : result
+        'Keywords_len'     : len(keywords)
     }
     return render(request, 'sum_summary/view.html', context)
 
@@ -135,18 +133,17 @@ def get_keyword_info(keyword_id):
     return Keyword.objects.filter(id=keyword_id)
 
 #@login_required
-#def bookmark_remove(request):
-    #bookmark_id = request.GET.get('id')
-    #username    = request.GET.get('user')
+def bookmark_remove(request):
+    bookmark_id = request.GET.get('id')
+    username    = request.GET.get('user')
 
-    #bookmarks = Bookmark.objects.get(id=bookmark_id)
-    #bookmarks.status = '0'
-    #bookmarks.save()
-    #bookmarks = Bookmark.objects.filter(username=username, status='1').order_by('reg_date')
+    Bookmark.objects.filter(id=bookmark_id).update(status='0')
+    bookmarks = Bookmark.objects.filter(username=username, status='1').order_by('reg_date')
 
-    #context = { 'username'      : username,
-    #            'bookmarks'     : bookmarks,
-    #            'bookmark_len'  : len(bookmarks),
-    #            'remove_result' : "success"
-    #           }
-    #return HttpResponse("dd")
+    context = { 'username'      : username,
+                'bookmarks'     : bookmarks,
+                'bookmark_len'  : len(bookmarks),
+              }
+    #url = '/search/bookmark_list?user=' + username
+    #return HttpResponseRedirect(url)
+    return render(request, 'sum_summary/bookmark_list.html',context)

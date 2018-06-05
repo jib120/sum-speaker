@@ -23,7 +23,7 @@
     <!-- Hover Effects -->
     <link rel="stylesheet" href="{% static 'css/set1.css' %}">
     <!-- Main CSS -->
-    <link rel="stylesheet" href="{% static 'css/style.css' %}?v=20180601">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}?v=20180605">
 </head>
 <body>
     <div class="dark-bg sticky-top">
@@ -114,16 +114,18 @@
             if(confirm_login==true)
                 MoveToLoginPage();
         });
-
-        if($('.bookmark_register_result').val()=='success')
-            alert("등록이 완료되었습니다.")
     });
 
     //TOP KEYWORD view로 이동
     function MoveToView(keyword){
         location.href="search/view.html?keyword="+keyword;
     }
-
+    function bookmarkRegister(){
+       alert("등록이 완료되었습니다.")
+    }
+    function bookmarkRemove(){
+       alert("삭제가 완료되었습니다.")
+    }
     function MoveToLoginPage(){
         location.href = "../accounts/login/"
     }
