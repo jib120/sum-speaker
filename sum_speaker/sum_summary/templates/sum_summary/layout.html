@@ -23,7 +23,7 @@
     <!-- Hover Effects -->
     <link rel="stylesheet" href="{% static 'css/set1.css' %}">
     <!-- Main CSS -->
-    <link rel="stylesheet" href="{% static 'css/style.css' %}?v=6">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}?v=20180605">
 </head>
 <body>
     <div class="dark-bg sticky-top">
@@ -37,12 +37,12 @@
                          </button>
                         <div class="collapse navbar-collapse justify-content-end" id="navbarNavDropdown">
                             <ul class="navbar-nav">
-                                
+
                                 {% if not user.is_authenticated %}
                                 <li class="nav-item"><a class="nav-link" href="{% url "signup" %}">회원가입</a></li>
                                 <li class="nav-item"><a class="nav-link" href="{% url "login" %}?next={{request.path}}">로그인</a></li>
                                 {% else %}
-                                <li class="nav-item"><a class="nav-link" href="#">즐겨찾기</a></li>
+                                <li class="nav-item"><a class="nav-link" href="{% url "bookmark_list" %}?user={{user}}">즐겨찾기</a></li>
                                 <li class="nav-item"><a class="nav-link" href="{% url "profile" %}">프로필</a></li>
                                 <li class="nav-item"><a class="nav-link" href="{% url "logout" %}?next={{request.path}}">로그아웃</a></li>
                                 <li><a class="nav-link" href="#">{{user}}</a></li>
@@ -56,7 +56,7 @@
     </div>
     <!--//END FOOTER -->
     {% block content %}
-    
+
     {% endblock content %}
     <!--============================= FOOTER =============================-->
     <footer class="main-block dark-bg">
@@ -64,7 +64,7 @@
                 <div class="col-md-12">
                     <div class="copyright">
                         <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-                        <p>Copyright &copy; 2018 Listing. All rights reserved <i class="ti-heart" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Sum Speaker</a></p>
+                        <p>Copyright &copy; 2018 Listing. All rights reserved <i class="ti-heart" aria-hidden="true"></i> by <a href="#" target="_blank">Sum Speaker</a></p>
                         <ul>
                             <li><a href="#"><span class="ti-facebook"></span></a></li>
                             <li><a href="#"><span class="ti-twitter-alt"></span></a></li>
@@ -81,8 +81,9 @@
     <script src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
     <scripzt src="{% static 'js/popper.min.js' %}"></scripzt>
     <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'js/jquery.preloaders.js' %}"></script>
     <script type="text/javascript">
-    $(document).ready(function() {
+   $(document).ready(function() {
         $(window).scroll(function() {
             // 100 = The point you would like to fade the nav in.
             if ($(window).scrollTop() > 100)
@@ -94,7 +95,7 @@
         function trim(str) {
             return str.replace(/(^\s*)|(\s*$)/gi, "");
         }
-
+        <!--index.html -->
         $('.btn-group .btn-form').click(function(e){
             e.preventDefault();
             input_value = trim($('input.btn-group1').val());
@@ -102,17 +103,34 @@
                 alert("keyword를 입력해주세요.");
                 return false;
             }
-
             confirm_keyword = confirm("입력하신 keyword가 정확합니까?");
             if(confirm_keyword == true){
                 MoveToView(input_value);
              }
         });
+
+        <!-- login이 필요할 경우 login page로 이동-->
+        $('.register-bookmark').click(function(){
+            confirm_login = confirm("즐겨찾기에 추가하시려면 로그인이 필요합니다. 로그인 하시겠습니까?");
+            if(confirm_login==true)
+                MoveToLoginPage();
+        });
     });
+
     //TOP KEYWORD view로 이동
     function MoveToView(keyword){
         location.href="search/view.html?keyword="+keyword;
     }
+    function bookmarkRegister(){
+       alert("등록이 완료되었습니다.")
+    }
+    function bookmarkRemove(){
+       alert("삭제가 완료되었습니다.")
+    }
+    function MoveToLoginPage(){
+        location.href = "../accounts/login/"
+    }
+
    </script>
 </body>
 </html>

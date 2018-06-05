@@ -1,0 +1,62 @@
+{% extends 'sum_summary/layout.html' %}
+
+{% block content %}
+
+    <!--============================= RESERVE A SEAT =============================-->
+    <section class="reserve-block">
+        <div class="container">
+            <div class="col-md-6">
+                <h5>{{user.username}}의 즐겨찾기 </h5>
+            </div>
+        </div>
+    </section>
+    <!--//END RESERVE A SEAT -->
+    <!--============================= BOOKING DETAILS =============================-->
+    <section class="light-bg booking-details_wrap">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8 responsive-wrap">
+                    <div class="booking-checkbox_wrap mt-4">
+                        <h5> Bookmark 총 개수 : {{bookmark_len}} {{remove_result}}</h5>
+                        <hr>
+                        {% for bookmark in bookmarks %}
+                        <div class="customer-review_wrap">
+                            <div class="bookmark-btn" onclick="bookmarkRemove()">
+                                <a href ="{% url 'bookmark_remove'%}?user={{user}}&id={{bookmark.id}}" class="bookmark-wrap">
+                                   <div class="bookmark-remove">
+                                        <span id="remove-btn">삭제</span>
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="bookmark-content-wrap">
+                                <div class="customer-content">
+                                    <div class="customer-review">
+                                        <h7><b>{{forloop.counter}}. 키워드 : <a href ="{% url 'bookmark_view' %}?id={{bookmark.id}}">{{bookmark.keyword}}</a></b></h7>
+                                    </div>
+                                </div>
+                               <p class="customer-text">
+                                   등록일 : {{bookmark.reg_date.year}}년 {{bookmark.reg_date.month}}월 {{bookmark.reg_date.day}}일
+                               </p>
+                            </div>
+                        </div>
+                        {% empty %}
+                        <div class="customer-review_wrap">
+                            <div class="customer-content-wrap">
+                                <div class="customer-content">
+                                    <div class="customer-review">
+                                        <h6 text-align="center"><b>{{user.username}}님. 등록하신 즐겨찾기가 없습니다.</b></h6>
+                                    </div>
+                                </div>
+                                <p class="customer-text">
+                                </p>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!--//END BOOKING DETAILS -->
+{% endblock content %}
+
