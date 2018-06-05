@@ -21,7 +21,7 @@
                                         <input type="hidden" name="keywords_{{forloop.counter}}" value="{{keyword.id}}">
                                         <input type="hidden" name="result" value="{{result}}">
                                     {% endfor %}
-                                    <button name="current_keyword" class="btn btn-danger" value="{{current_keyword}}">즐겨찾기 등록</button>
+                                    <button name="current_keyword" class="btn btn-danger" value="{{current_keyword}}" onclick="bookmarkRegister()">즐겨찾기 등록</button>
                             {% else %}
                                 <button class="btn btn-danger register-bookmark">즐겨찾기 등록</button>
                             {% endif %}
@@ -75,7 +75,7 @@
                                         <input type="hidden" name="keywords_{{forloop.counter}}" value="{{keyword.id}}">
                                         <input type="hidden" class="bookmark_register_result" name="result" value="{{result}}">
                                     {% endfor %}
-                                    <button name="current_keyword" class="btn btn-danger" value="{{current_keyword}}">즐겨찾기 등록</button>
+                                    <button name="current_keyword" class="btn btn-danger" value="{{current_keyword}}"  onclick="bookmarkRegister()">즐겨찾기 등록</button>
                             {% else %}
                                 <button class="btn btn-danger register-bookmark">즐겨찾기 등록</button>
                             {% endif %}
