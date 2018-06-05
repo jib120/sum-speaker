@@ -1,7 +1,49 @@
 {% extends 'sum_summary/layout.html' %}
 
 {% block content %}
-
+<script src="//developers.kakao.com/sdk/js/kakao.min.js"></script>
+<script>
+    // 사용할 앱의 JavaScript 키를 설정해 주세요.
+    Kakao.init('a209aab06f101c1e3506ad7b5d4d9658');
+    function sendLink(id) {
+        Kakao.Link.sendTalkLink({
+            label: '<제목>\n' + $(".customer-title")[id - 1].innerText + '\n<요약기사><'+$(".customer-author")[id - 1].innerText+'>\n'+$(".customer-text")[id - 1].innerText + '\n원본URL: '+$(".customer-url")[id - 1].innerText,
+            image : {src: "http://k.kakaocdn.net/14/dn/btqmud5nJob/togeIs2aB4Kf3NKz53i7Kk/o.jpg" ,width:300,height:150 },
+            fail: function(){alert('모바일 기기에서만 가능한 기능입니다.');}
+        });
+    }
+    function m_sendLink() {
+        sum_link = 'encodeURIComponent(document.URL)'
+        Kakao.Link.sendDefault({
+            objectType: 'feed',
+                content: {
+                    title: 'SummarySpeaker',
+                    imageUrl: "https://k.kakaocdn.net/14/dn/btqmud5nJob/togeIs2aB4Kf3NKz53i7Kk/o.jpg",
+                    link: {
+                    webUrl: '',
+                    mobileWebUrl: '',
+                    androidExecParams: '',
+                    iosExecParams: ''
+                    },
+                    description: '검색 Keyword : {{current_keyword}}',
+                    imageWidth: 680,
+                    imageHeight: 240
+                },
+                buttons: [
+                    {
+                    title: "검색Keyword 바로가기",
+                    link: {
+                        webUrl: sum_link,
+                        mobileWebUrl: window.location.href,
+                        androidExecParams: '설정-플랫폼-웹-사이트도메인에 등록한 주소',
+                        iosExecParams: window.location.href
+                     }
+                 }
+             ]
+        });
+        console.log(sum_link)
+    }
+</script>
     <!--============================= RESERVE A SEAT =============================-->
     <section class="reserve-block">
         <div class="container">
@@ -34,7 +76,39 @@
     </section>
     <!--//END RESERVE A SEAT -->
     <!--============================= BOOKING DETAILS =============================-->
+    {% load static %}
+    
     <section class="light-bg booking-details_wrap">
+            <div class="reserve-seat-block2" >																			
+                    <!-- Share on Twitter -->
+                    <a href="#" onclick="javascript:window.open('https://twitter.com/intent/tweet?text=[%EA%B3%B5%EC%9C%A0keyword:{{current_keyword}}]%20'
+                    +encodeURIComponent(document.URL)+'%20-%20'+encodeURIComponent(document.title), 'twittersharedialog',
+                        'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=600');return false;" target="_blank" alt="Share on Twitter"><img src="{% static 'images/Twitter.png' %}"></a>
+                    
+                    <!-- Share on Facebook -->
+                    <a href="#" onclick="javascript:window.open('https://www.facebook.com/sharer/sharer.php?u='
+                    +encodeURIComponent(document.URL)+'&amp;t='+encodeURIComponent(document.title), 'facebooksharedialog',
+                        'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=600');return false;" target="_blank" alt="Share on Facebook">
+                    <img src="{% static 'images/Facebook.png' %}"></a>
+                                    
+                    <!-- Share on Google+ -->
+                    <a href="#" onclick="javascript:window.open('https://plus.google.com/share?url='+encodeURIComponent(document.URL), 'googleplussharedialog','menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=350,width=600');return false;" target="_blank" alt="Share on Google+">
+                    <img src="{% static 'images/Google_Plus.png' %}"></a>
+                    
+                    <!-- Share on Kakaostory -->
+                    <a href="#" onclick="javascript:window.open('https://story.kakao.com/s/share?url='+encodeURIComponent(document.URL), 'kakaostorysharedialog', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=400,width=600');return false;" target="_blank" alt="Share on kakaostory">
+                    <img src="{% static 'images/Kakao_Story.png' %}"></a>
+                    
+                    <!-- Share on Naver -->
+                    <a href="#" onclick="javascript:window.open('http://share.naver.com/web/shareView.nhn?url='
+                    +encodeURIComponent(document.URL)+'&amp;title='+encodeURIComponent(document.title),
+                        'naversharedialog', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');return false;" target="_blank" alt="Share on Naver">
+                    <img src="{% static 'images/Naver.png' %}"></a>
+
+                    <!-- Share on KaKao -->
+                    <a href="#" onclick="javascript:m_sendLink()">
+                    <img src="{% static 'images/kakao.png' %}"></a>
+                </div>
         <div class="container">
             <div class="row">
                 <div class="col-md-8 responsive-wrap">
@@ -42,17 +116,33 @@
                         <h5>{{Keywords_len}} Articles(총 개수) </h5>
                         <hr>
                         {% for keyword in Keywords %}
+                        <div class="col-xs-11">
+                            <div class="copyright" style ="text-align: right;">
+                                <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+                                <ul>
+                                    <!--<li><a href="#" onclick="window.open('https://www.facebook.com/dialog/share?app_id={APP_ID}&display=popup&href={URL}&redirect_uri={REDIRECT_URI}','window_name','width=430,height=500,location=no,status=no,scrollbars=yes');"><span class="ti-facebook" style = " font-size:1em;  color: rgb(13, 46, 196));"></span></a></li>-->
+                                    <!--<li><a href="https://plus.google.com/share?url={URL}"><span class="ti-google" style = " font-size:1em;  color: rgb(67, 97, 230));"></span></a></li>-->
+                                    <li><a width="140" height="28" href="https://twitter.com/intent/tweet?text={{keyword.title}}{{keyword.summary}}&url={{keyword.link}}" target="_new"><span class="ti-twitter-alt" style = " font-size:1em;  color: rgb(67, 97, 230));"></span></a></li>
+                                    <li><a href="javascript:sendLink({{forloop.counter}})">KAKAO</span></a></li>
+                                </ul>
+                                </ul>
+                            </div>
+                        </div>
                         <div class="customer-review_wrap">
                             <div class="customer-img">
-                                <p>{{keyword.author}}</p>
+                                <p class="customer-author">{{keyword.author}}</p>
                             </div>
+                                
                             <div class="customer-content-wrap">
                                 <div class="customer-content">
                                     <div class="customer-review">
-                                        <h6><b>{{forloop.counter}}.</b> {{keyword.title}}</h6>
-                                        <h7><a href={{keyword.link}}>{{keyword.link}}</a></h7>
+                                        <h6><b>{{forloop.counter}}.</b><p class="customer-title"> {{keyword.title}}</p></h6>
+                                        <h7><a href={{keyword.link}}><p class="customer-url">{{keyword.link}}</p></a></h7>
                                     </div>
                                 </div>
+                                    <script type="text/javascript"> 
+                                    var a = "{{keyword.summary}}";
+                                    </script>
                                 <p class="customer-text">
                                     {{keyword.summary}}
                                 </p>
@@ -63,6 +153,7 @@
                 </div>
             </div>
         </div>
+        
         <div class="col-md-8">
             <div class="reserve-seat-block2">
                 <div class="reserve-btn">

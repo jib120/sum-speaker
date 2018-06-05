@@ -66,15 +66,16 @@
 <section class="container">
         <section class="login-form">
             <form class="form-signin" method="post" action="" role="login">
-                    <h2>{{user}}'s profile</h2>
+                    <h4>{{user}}회원님의 가입사항</h4>
                     <ul>
-                        <li>username : {{user.username}}</li>
-                        <li>email : {{user.email}}</li>
-                        <li>first_name : {{user.first_name}}</li>
-                        <li>lasat_name : {{user.last_name}}</li>
-                        <li>date_joined : {{user.date_joined}}</li>
-                        <li><a class="btn btn-primary" href="{% url "change_password" %}">reset password</a></li>
-                        <a href ="#" class="form-link">Contact us.</a>
+                        <li>사용자ID : {{user.username}}</li>
+                        <li>이메일주소 : {{user.email}}</li>
+                        <li>성 : {{user.first_name}}</li>
+                        <li>이름 : {{user.last_name}}</li>
+                        <li>마지막 접속일 : {{user.date_joined}}</li>
+                        <li><a class="btn btn-primary" href="{% url "change_password" %}">비밀번호 변경</a></li> <hr>
+                        계정에 관해 기타 문의사항이 있으시면 아래 메일로 연락 바랍니다. <br>
+                        <a href ="mailto:sum_speaker@naver.com?[문의]" class="form-link">Contact us (mail).</a>
                     </ul>
             </form>
     </section>  
