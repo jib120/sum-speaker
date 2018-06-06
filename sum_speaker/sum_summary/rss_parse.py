@@ -28,7 +28,7 @@ from lexrankr import LexRank
 
 import asyncio
 from contextlib import suppress
-
+import queue
 
 #from html2text import html2text
 
@@ -105,55 +105,67 @@ def gather_rss(keyword, max_count=20):
         #print(text_summary)
     print_with_timestamp("end rss gather !")
 
-def get_article(e, use_lexrank=False):
+def get_article(que, seq, use_lexrank=False):
     # boundary values
-    ARTICLE_SIZE_THRESHOLD = 50
+    ARTICLE_SIZE_THRESHOLD = 100
+    retry_cnt = 3
 
-    try:
-        ##########################
-        # by newspaer lib ########
-        article = newspaper.Article(e['link'])
-        #loop = asyncio.get_event_loop()
-        #await loop.run_in_executor(article, download)
-        article.download()
-        # wait for a moment
-        # sleep(0.1)
-        #await loop.run_in_executor(article, parse)
-        article.parse()
-        text = article.text
-        ##########################
-        '''
-        url = e['link']
-        link = urllib.request.urlopen(url)
-        dat = link.read()
-        dat = dat.decode('utf-8', 'backslashreplace')
-        text = html2text(dat, url)
+    while(retry_cnt > 0):
+        retry_cnt -= 1
 
-        #print("dat={}, text= {}".format(dat, text))
-        '''
-        ##########################
+        e = que.get()
 
-        # text count check : threshold 200? 400?
-        if len(text) < ARTICLE_SIZE_THRESHOLD:
+        if e is None:
             return ()
+        try:
+            ##########################
+            # by newspaer lib ########
+            article = newspaper.Article(e['link'])
+            #loop = asyncio.get_event_loop()
+            #await loop.run_in_executor(article, download)
+            article.download()
+            # wait for a moment
+            # sleep(0.1)
+            #await loop.run_in_executor(article, parse)
+            article.parse()
+            text = article.text
 
-        # remove absent lines
-        text = text.replace('\n\n', '\n')
-        # text = re.sub("(\[.*기자\])", '', text)
+            print("{}: {}".format(seq, e['title']))
+            ##########################
+            '''
+            url = e['link']
+            link = urllib.request.urlopen(url)
+            dat = link.read()
+            dat = dat.decode('utf-8', 'backslashreplace')
+            text = html2text(dat, url)
+    
+            #print("dat={}, text= {}".format(dat, text))
+            '''
+            ##########################
 
-        if(use_lexrank):
-            text_summary = summarize_text_with_lexrank(text)
-        else:
-            text_summary = summarize_text(text)
-        # 제목에서 [포토], [사진] 등의 문구 제거
-        title = re.sub("\[.*\]", '', e['title'])
+            # text count check : threshold 200? 400?
+            if len(text) < ARTICLE_SIZE_THRESHOLD:
+                continue
 
-        #yield text_summary, e['link'], title, e['author']
-        return text_summary, e['link'], title, e['author']
+            # remove absent lines
+            text = text.replace('\n\n', '\n')
+            # text = re.sub("(\[.*기자\])", '', text)
 
-    except Exception as ex:
-        print('exception occured {}'.format(ex))
-        return ()
+            if(use_lexrank):
+                text_summary = summarize_text_with_lexrank(text)
+            else:
+                text_summary = summarize_text(text)
+            # 제목에서 [포토], [사진] 등의 문구 제거
+            title = re.sub("\[.*\]", '', e['title'])
+
+            #yield text_summary, e['link'], title, e['author']
+            return text_summary, e['link'], title, e['author']
+
+        except Exception as ex:
+            print('exception occured {}'.format(ex))
+            continue
+
+    return ()
 
 def gather_rss_async(keyword, max_count=20):
     url = "http://newssearch.naver.com/search.naver?where=rss&query=" \
@@ -170,19 +182,32 @@ def gather_rss_async(keyword, max_count=20):
     loop = asyncio.new_event_loop()
 
     async def coroutines():
+        q = queue.Queue()
+        for e in data.entries:
+            q.put(e)
+
         futures = [
             loop.run_in_executor(
                 None,
                 get_article,
-                e
+                q,
+                i
             )
-            for e in data.entries[:max_count]
+            for i in range(max_count)
         ]
-        
+
+        # defense codes
+        for i in range(max_count):
+            q.put(None)
+
+        #q.join()
+        print("future len = {}".format(len(futures)))
         for res in await asyncio.gather(*futures):
             if res:
                 keywords_list.append(res)
+
     try:
+
         #loop.run_until_complete(asyncio.wait(unfinished))
         loop.run_until_complete(coroutines())
         loop.close()
