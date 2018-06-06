@@ -73,7 +73,7 @@
   function textToSpeech(text) {
     console.log('textToSpeech', arguments);
     text = '{{tts_for_text}}';
-    text = replaceHtmlTags(text);
+    //text = replaceHtmlTags(text);
     /*
     var u = new SpeechSynthesisUtterance();
     u.text = 'Hello world';
@@ -84,7 +84,7 @@
     };
     speechSynthesis.speak(u);
     */
-    var lines = text.innerText.split('\n');
+    var lines = text.split('\n');
     for(var i = 0;i < lines.length;i++){
         // simple version
         speechSynthesis.speak(new SpeechSynthesisUtterance(lines[i]));
@@ -215,13 +215,11 @@
                                         <input type="hidden" class="bookmark_register_result" name="result" value="{{result}}">
                                     {% endfor %}
                                     <button name="current_keyword" class="btn btn-danger" value="{{current_keyword}}"  onclick="bookmarkRegister()">즐겨찾기 등록</button>
-				</form>
+				                </form>
                             {% else %}
                                 <button class="btn btn-danger register-bookmark">즐겨찾기 등록</button>
                             {% endif %}
-
                             <button name="do_tts" class="btn btn-danger" onclick="textToSpeech()">음성지원</button>
-                        <a href="#" class="btn btn-danger">음성지원</a>
                     </div>
                 </div>
             </div>
