@@ -14,23 +14,33 @@ import jpype
 # encoding error on installing in windows
 # - chcp 65001 -> after again -> pip install textrankr
 
+import os
+
+sys.path.append('./sum_summary/textrankr')
+sys.path.append('./sum_summary/lexrankr')
+
+### for test using main
+sys.path.append('./textrankr')
+sys.path.append('./lexrankr')
+
 from textrankr import TextRank
+from lexrankr import LexRank
 
 import asyncio
+from contextlib import suppress
+
+
+#from html2text import html2text
 
 # workaround preloading kkma in konlpy
 # kkma 형태소 분석기 로딩이 엄청 오래 걸림... ( 10초? )
+
 #########################################
 if jpype.isJVMStarted():
     jpype.attachThreadToJVM()
 
 _textrank = TextRank("test")
 #########################################
-
-# reference code(related newspaper lib) : http://newspaper.readthedocs.io/en/latest/
-
-def print_with_timestamp(t):
-    print("[{}] {}".format(time.time(), t))
 
 def summarize_text(text):
     # < workaround cooes > for crash problem with django and konlpy
@@ -39,8 +49,26 @@ def summarize_text(text):
         jpype.attachThreadToJVM()
     # < workaround codes end!!! >
 
+    #print_with_timestamp("textrank init")
     _textrank = TextRank(text)
+    #print_with_timestamp("textrank init end")
     return _textrank.summarize()
+
+
+def summarize_text_with_lexrank(text):
+    lexrank = LexRank(n_clusters=1)
+    lexrank.summarize(text)
+    summaries = lexrank.probe(3)
+
+    if len(summaries)  == 0:
+        return ""
+
+    return ". ".join(summaries)
+# reference code(related newspaper lib) : http://newspaper.readthedocs.io/en/latest/
+
+def print_with_timestamp(t):
+    print("[{}] {}".format(time.time(), t))
+
 
 def gather_rss(keyword, max_count=20):
     url = "http://newssearch.naver.com/search.naver?where=rss&query=" \
@@ -62,41 +90,28 @@ def gather_rss(keyword, max_count=20):
         print("link = {}".format(e['link']))
 
         try:
-            article = newspaper.Article(e['link'])
-
-            article.download()
-            # wait for a moment
-            # sleep(0.1)
-            article.parse()
-
-            text = article.text
+            res = get_article(e)
 
             # text count check : threshold 200? 400?
-            if len(text) < ARTICLE_SIZE_THRESHOLD:
+            if not res:
                 max_count += 1
                 continue
 
-            # remove absent lines
-            text = text.replace('\n\n', '\n')
-            # text = re.sub("(\[.*기자\])", '', text)
-
-            text_summary = summarize_text(text)
-
-            # 제목에서 [포토], [사진] 등의 문구 제거
-            title = re.sub("\[.*\]", '', e['title'])
-
-            yield text_summary, e['link'], title, e['author']
+            yield res
         except:
             continue
 
         #print(len(text))
         #print(text_summary)
+    print_with_timestamp("end rss gather !")
 
-def get_article(e):
+def get_article(e, use_lexrank=False):
     # boundary values
     ARTICLE_SIZE_THRESHOLD = 50
 
     try:
+        ##########################
+        # by newspaer lib ########
         article = newspaper.Article(e['link'])
         #loop = asyncio.get_event_loop()
         #await loop.run_in_executor(article, download)
@@ -106,6 +121,17 @@ def get_article(e):
         #await loop.run_in_executor(article, parse)
         article.parse()
         text = article.text
+        ##########################
+        '''
+        url = e['link']
+        link = urllib.request.urlopen(url)
+        dat = link.read()
+        dat = dat.decode('utf-8', 'backslashreplace')
+        text = html2text(dat, url)
+
+        #print("dat={}, text= {}".format(dat, text))
+        '''
+        ##########################
 
         # text count check : threshold 200? 400?
         if len(text) < ARTICLE_SIZE_THRESHOLD:
@@ -115,14 +141,18 @@ def get_article(e):
         text = text.replace('\n\n', '\n')
         # text = re.sub("(\[.*기자\])", '', text)
 
-        text_summary = summarize_text(text)
+        if(use_lexrank):
+            text_summary = summarize_text_with_lexrank(text)
+        else:
+            text_summary = summarize_text(text)
         # 제목에서 [포토], [사진] 등의 문구 제거
         title = re.sub("\[.*\]", '', e['title'])
 
         #yield text_summary, e['link'], title, e['author']
         return text_summary, e['link'], title, e['author']
 
-    except:
+    except Exception as ex:
+        print('exception occured {}'.format(ex))
         return ()
 
 def gather_rss_async(keyword, max_count=20):
@@ -130,14 +160,14 @@ def gather_rss_async(keyword, max_count=20):
           + urllib.request.quote(keyword)
 
     print_with_timestamp("start rss gather !")
+    start_time = time.time()
+
     data = feedparser.parse(url)
     print("url={}, data len={}".format(url, len(data.entries)))
 
     keywords_list = []
-    futures = []
 
     loop = asyncio.new_event_loop()
-    asyncio.set_event_loop(loop)
 
     async def coroutines():
         futures = [
@@ -146,20 +176,56 @@ def gather_rss_async(keyword, max_count=20):
                 get_article,
                 e
             )
-            for e in data.entries[:10]
+            for e in data.entries[:max_count]
         ]
+        
         for res in await asyncio.gather(*futures):
             if res:
                 keywords_list.append(res)
+    try:
+        #loop.run_until_complete(asyncio.wait(unfinished))
+        loop.run_until_complete(coroutines())
+        loop.close()
+    except Exception as ex:
+        print('exception occured {}'.format(ex))
 
-    loop.run_until_complete(coroutines())
+    print_with_timestamp("end rss gather - {} : {} elapsed!".format(max_count, time.time()-start_time))
+    return keywords_list[:max_count]
 
-    print_with_timestamp("end rss gather - {}!".format(max_count))
-    return keywords_list
+'''
+futures = [
+    loop.run_in_executor(
+        None,
+        get_article,
+        e
+    )
+    for e in data.entries[:max_count + 20]
+]
+
+unfinished = futures
+for i in range(max_count):
+    finished, unfinished = loop.run_until_complete(
+        asyncio.wait(unfinished, return_when=asyncio.FIRST_COMPLETED))
+    for res in finished:
+        if res.result():
+            keywords_list.append(res.result())
+
+for task in unfinished:
+    task.cancel()
+    with suppress(asyncio.CancelledError):
+        loop.run_until_complete(task)
+
+#loop.run_until_complete(coroutines())
+'''
+
 
 if __name__ == "__main__":
-    for t in gather_rss(sys.argv[1]):
+    print_with_timestamp("start!")
+    start_time = time.time()
+
+    for t in gather_rss_async(sys.argv[1], 10):
         print(t)
 
+    print_with_timestamp("end![{} elapsed!]".format(time.time()-start_time))
 
 

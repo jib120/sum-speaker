@@ -44,10 +44,53 @@
         console.log(sum_link)
     }
     function basicPopup(id) {
-        var url =  'https://twitter.com/intent/tweet?text='+'[제목]'+ $(".customer-title")[id - 1].innerText + '%20%20%20[요약기사]'+$(".customer-author")[id - 1].innerText+$(".customer-text")[id - 1].innerText + '%20%20%20원본URL: '+$(".customer-url")[id - 1].innerText + '%20%20%20[Sum_Speaker_URL]:'+ window.location.href
+        var url =  'https://twitter.com/intent/tweet?text='+
+        '[제목]\t'+ $(".customer-title")[id - 1].innerText + '%20%20%20[요약기사]'+$(".customer-author")[id - 1].innerText+'>\n'+$(".customer-text")[id - 1].innerText + '%20%20%20원본URL: '+$(".customer-url")[id - 1].innerText + '%20%20%20[Sum_Speaker_URL]:'+ window.location.href
         popupWindow = window.open(url,'popUpWindow','height=500,width=700,left=50,top=50,resizable=yes,scrollbars=yes,toolbar=yes,menubar=no,location=no,directories=no, status=yes')
         console.log(url)    
     }
+
+    /*
+    '"': '&quot;',
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    "'": '&#039;'
+    */
+    function replaceHtmlTags(text) {
+        text.replace('&#39;', "'");
+        text.replace('&quot;', '"');
+        text.replace('&amp;', '&');
+        text.replace('&lt;', '<');
+        text.replace('&gt;', '>');
+
+        return text;
+    }
+    /**
+   * textToSpeech
+   * 지원: 크롬, 사파리, 오페라, 엣지
+   */
+  function textToSpeech(text) {
+    console.log('textToSpeech', arguments);
+    text = '{{tts_for_text}}';
+    //text = replaceHtmlTags(text);
+    /*
+    var u = new SpeechSynthesisUtterance();
+    u.text = 'Hello world';
+    u.lang = 'en-US';
+    u.rate = 1.2;
+    u.onend = function(event) {
+      log('Finished in ' + event.elapsedTime + ' seconds.');
+    };
+    speechSynthesis.speak(u);
+    */
+    var lines = text.split('\n');
+    for(var i = 0;i < lines.length;i++){
+        // simple version
+        speechSynthesis.speak(new SpeechSynthesisUtterance(lines[i]));
+    }
+
+  }
 </script>
     <!--============================= RESERVE A SEAT =============================-->
     <section class="reserve-block">
@@ -92,7 +135,7 @@
                     
                     <!-- Share on Facebook -->
                     <a href="#" onclick="javascript:window.open('https://www.facebook.com/sharer/sharer.php?u='
-                    +encodeURIComponent(document.URL)+'&t='+encodeURIComponent(document.title), 'facebooksharedialog',
+                    +encodeURIComponent(document.URL)+'&amp;t='+encodeURIComponent(document.title), 'facebooksharedialog',
                         'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=600');return false;" target="_blank" alt="Share on Facebook">
                     <img src="{% static 'images/Facebook.png' %}"></a>
                                     
@@ -105,7 +148,9 @@
                     <img src="{% static 'images/Kakao_Story.png' %}"></a>
                     
                     <!-- Share on Naver -->
-                    <a href="#" onclick="javascript:window.open('http://share.naver.com/web/shareView.nhn?url='+encodeURIComponent(document.URL)+'&amp;title='+encodeURIComponent(document.title),'naversharedialog', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');return false;" target="_blank" alt="Share on Naver">
+                    <a href="#" onclick="javascript:window.open('http://share.naver.com/web/shareView.nhn?url='
+                    +encodeURIComponent(document.URL)+'&amp;title='+encodeURIComponent(document.title),
+                        'naversharedialog', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');return false;" target="_blank" alt="Share on Naver">
                     <img src="{% static 'images/Naver.png' %}"></a>
 
                     <!-- Share on KaKao -->
@@ -162,7 +207,7 @@
                 <div class="reserve-btn">
                     <div class="featured-btn-wrap">
                             {% if user.is_authenticated %}
-                                <form action ="{% url 'bookmark_register' %}?user={{user}}" method="post">
+                                <form class="btn" action ="{% url 'bookmark_register' %}?user={{user}}" method="post">
                                     {% csrf_token %}
                                     <input type="hidden" name="username" value="{{user}}">
                                     {% for keyword in Keywords%}
@@ -170,10 +215,11 @@
                                         <input type="hidden" class="bookmark_register_result" name="result" value="{{result}}">
                                     {% endfor %}
                                     <button name="current_keyword" class="btn btn-danger" value="{{current_keyword}}"  onclick="bookmarkRegister()">즐겨찾기 등록</button>
+				                </form>
                             {% else %}
                                 <button class="btn btn-danger register-bookmark">즐겨찾기 등록</button>
                             {% endif %}
-                        <a href="#" class="btn btn-danger">음성지원</a>
+                            <button name="do_tts" class="btn btn-danger" onclick="textToSpeech()">음성지원</button>
                     </div>
                 </div>
             </div>
