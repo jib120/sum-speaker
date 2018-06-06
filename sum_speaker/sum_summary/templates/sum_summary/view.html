@@ -43,6 +43,13 @@
         });
         console.log(sum_link)
     }
+    function basicPopup(id) {
+        var url =  'https://twitter.com/intent/tweet?text='+
+        '[제목]\t'+ $(".customer-title")[id - 1].innerText + '%20%20%20[요약기사]'+$(".customer-author")[id - 1].innerText+'>\n'+$(".customer-text")[id - 1].innerText + '%20%20%20원본URL: '+$(".customer-url")[id - 1].innerText + '%20%20%20[Sum_Speaker_URL]:'+ window.location.href
+        popupWindow = window.open(url,'popUpWindow','height=500,width=700,left=50,top=50,resizable=yes,scrollbars=yes,toolbar=yes,menubar=no,location=no,directories=no, status=yes')
+        console.log(url)    
+    }
+
     /*
     '"': '&quot;',
     '&': '&amp;',
@@ -105,7 +112,6 @@
                                         <input type="hidden" name="result" value="{{result}}">
                                     {% endfor %}
                                     <button name="current_keyword" class="btn btn-danger" value="{{current_keyword}}" onclick="bookmarkRegister()">즐겨찾기 등록</button>
-                                </form>
                             {% else %}
                                 <button class="btn btn-danger register-bookmark">즐겨찾기 등록</button>
                             {% endif %}
@@ -164,8 +170,8 @@
                                 <ul>
                                     <!--<li><a href="#" onclick="window.open('https://www.facebook.com/dialog/share?app_id={APP_ID}&display=popup&href={URL}&redirect_uri={REDIRECT_URI}','window_name','width=430,height=500,location=no,status=no,scrollbars=yes');"><span class="ti-facebook" style = " font-size:1em;  color: rgb(13, 46, 196));"></span></a></li>-->
                                     <!--<li><a href="https://plus.google.com/share?url={URL}"><span class="ti-google" style = " font-size:1em;  color: rgb(67, 97, 230));"></span></a></li>-->
-                                    <li><a width="140" height="28" href="https://twitter.com/intent/tweet?text={{keyword.title}}{{keyword.summary}}&url={{keyword.link}}" target="_new"><span class="ti-twitter-alt" style = " font-size:1em;  color: rgb(67, 97, 230));"></span></a></li>
-                                    <li><a href="javascript:sendLink({{forloop.counter}})">KAKAO</span></a></li>
+                                    <li><a width="140" height="28" href="javascript:basicPopup({{forloop.counter}})" target="_new"><span class="ti-twitter-alt" style = "font-size:1em;  color: rgb(67, 97, 230);"></span></a></li>
+                                    <li><a href="javascript:sendLink({{forloop.counter}})" style = "font-size:1em;  color: rgb(156, 212, 0);">KAKAO</span></a></li>
                                 </ul>
                                 </ul>
                             </div>
@@ -209,12 +215,13 @@
                                         <input type="hidden" class="bookmark_register_result" name="result" value="{{result}}">
                                     {% endfor %}
                                     <button name="current_keyword" class="btn btn-danger" value="{{current_keyword}}"  onclick="bookmarkRegister()">즐겨찾기 등록</button>
-                                </form>
+				</form>
                             {% else %}
                                 <button class="btn btn-danger register-bookmark">즐겨찾기 등록</button>
                             {% endif %}
+
                             <button name="do_tts" class="btn btn-danger" onclick="textToSpeech()">음성지원</button>
-                        <!--<a href="#" class="btn btn-danger">음성지원</a>-->
+                        <a href="#" class="btn btn-danger">음성지원</a>
                     </div>
                 </div>
             </div>
