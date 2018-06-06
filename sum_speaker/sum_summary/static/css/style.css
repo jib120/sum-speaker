@@ -835,11 +835,11 @@ footer {
   color: #737882;
   display: inline-block;
   vertical-align: top;
-  line-height: 0.8;
+  /*line-height: 0.8;*/
   margin: 0 0 0 8px; }
 
 .customer-review {
-  display: inline-block; }
+  /*display: inline-block;*/ }
   @media (max-width: 576px) {
     .customer-review {
       display: block; } }
@@ -1076,5 +1076,5 @@ footer {
     .bookmark-content-wrap a span {
       margin: 0 6px 0 0; }
 
-      
+
 /*# sourceMappingURL=style.css.map */
