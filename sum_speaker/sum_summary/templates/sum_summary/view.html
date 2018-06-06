@@ -90,7 +90,12 @@
         speechSynthesis.speak(new SpeechSynthesisUtterance(lines[i]));
     }
 
-  }
+  } 
+  function textToSpeechStop() {
+    var synth = window.speechSynthesis;
+    synth.cancel();
+    var amIPaused = synth.paused;
+  } 
 </script>
     <!--============================= RESERVE A SEAT =============================-->
     <section class="reserve-block">
@@ -220,6 +225,7 @@
                                 <button class="btn btn-danger register-bookmark">즐겨찾기 등록</button>
                             {% endif %}
                             <button name="do_tts" class="btn btn-danger" onclick="textToSpeech()">음성지원</button>
+                            <button name="do_tts" class="btn btn-danger" onclick="javascript:textToSpeechStop()">음성지원중지</button>
                     </div>
                 </div>
             </div>
