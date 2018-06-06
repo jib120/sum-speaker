@@ -15,6 +15,7 @@ import html
 #from django.core.exceptions import ObjectDoesNotExist
 
 from .rss_parse import gather_rss_async
+from django.utils.safestring import mark_safe
 
 def index(request):
     top10 = show_top_issue()
@@ -39,10 +40,13 @@ def search(request):
     KEYWORD_MAX_COUNT = 10
 
     current_keyword = request.GET.get('keyword')
+    cnt = request.GET.get('len')
+    if cnt:
+        KEYWORD_MAX_COUNT = int(cnt)
     #print(current_keyword)
 
     # Check caching data in database about keyword
-    keywords = Keyword.objects.filter(keyword=current_keyword).order_by('reg_date')[:20]
+    keywords = Keyword.objects.filter(keyword=current_keyword).order_by('reg_date')[:KEYWORD_MAX_COUNT]
     tts_for_text = " 오늘 {}에 대한 기사들을 말씀드리겠습니다. \n ".format(current_keyword)
 
     if len(keywords) > 0:
@@ -70,14 +74,19 @@ def search(request):
         tts_for_text += "{} 번쨰 기사는 {} 입니다. \n ".format(order_text_dic[i], keyword.title)
         tts_for_text += "{} . \n ".format(keyword.summary)
 
-    tts_for_text += "  이상입니다.  애청해 주셔서 감사합니다. \n "
+    tts_for_text += "  이상입니다.  들어 주셔서 감사합니다. \n "
     tts_for_text = tts_for_text.replace('\n', ' \\n')
-    print(tts_for_text)
+
+    # 특수문자 처리
+    tts_for_text = tts_for_text.replace('\'', '\\\'')
+    tts_for_text = tts_for_text.replace('\"', '\\\"')
+
+    #print(tts_for_text)
     context = {
         'Keywords' : keywords,
         'current_keyword' : current_keyword,
         'Keywords_len' : len(keywords),
-        'tts_for_text' : tts_for_text
+        'tts_for_text' : mark_safe(tts_for_text)
     }
 
     return render(request, 'sum_summary/view.html', context)

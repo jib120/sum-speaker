@@ -57,15 +57,7 @@
     '>': '&gt;',
     "'": '&#039;'
     */
-    function replaceHtmlTags(text) {
-        text.replace('&#39;', "'");
-        text.replace('&quot;', '"');
-        text.replace('&amp;', '&');
-        text.replace('&lt;', '<');
-        text.replace('&gt;', '>');
 
-        return text;
-    }
     /**
    * textToSpeech
    * 지원: 크롬, 사파리, 오페라, 엣지
@@ -73,6 +65,7 @@
   function textToSpeech(text) {
     console.log('textToSpeech', arguments);
     text = '{{tts_for_text}}';
+
     //text = replaceHtmlTags(text);
     /*
     var u = new SpeechSynthesisUtterance();
@@ -87,20 +80,32 @@
     var lines = text.split('\n');
     for(var i = 0;i < lines.length;i++){
         // simple version
-        speechSynthesis.speak(new SpeechSynthesisUtterance(lines[i]));
+        txt = lines[i];
+        MAX_LENGTH = 100;
+
+        if(txt.length > MAX_LENGTH) {
+            partial = txt.substring(0, MAX_LENGTH);
+            last = partial.lastIndexOf('.');
+            partial = partial.substring(0, last);
+            speechSynthesis.speak(new SpeechSynthesisUtterance(partial));
+            txt = txt.substr(last, txt.length);
+        }
+        speechSynthesis.speak(new SpeechSynthesisUtterance(txt));
     }
 
-  } 
+
+  }
+
   function textToSpeechStop() {
-    var synth = window.speechSynthesis;
-    synth.cancel();
-    var amIPaused = synth.paused;
-  } 
+        var synth = window.speechSynthesis;
+        synth.cancel();
+        var amIPaused = synth.paused;
+    }
 </script>
     <!--============================= RESERVE A SEAT =============================-->
     <section class="reserve-block">
         <div class="container">
-            <div class="col-md-6">
+            <div class="col-md-12">
                 <h5>입력하신 KEYWORD : <span class="keyword_color">{{current_keyword}}</span></h5>
             </div>
             <div class="row">
@@ -225,7 +230,7 @@
                                 <button class="btn btn-danger register-bookmark">즐겨찾기 등록</button>
                             {% endif %}
                             <button name="do_tts" class="btn btn-danger" onclick="textToSpeech()">음성지원</button>
-                            <button name="do_tts" class="btn btn-danger" onclick="javascript:textToSpeechStop()">음성지원중지</button>
+                            <button name="tts_stop" class="btn btn-danger" onclick="textToSpeechStop()">음성지원 중지</button>
                     </div>
                 </div>
             </div>
