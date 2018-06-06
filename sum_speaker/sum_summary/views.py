@@ -35,7 +35,7 @@ def unescape(s):
 
 
 def search(request):
-
+    order_text_dic = ['첫', '두', '세', '네', '다섯', '여섯', '일곱', '여덟', '아홉', '열']
     KEYWORD_MAX_COUNT = 10
 
     current_keyword = request.GET.get('keyword')
@@ -43,13 +43,14 @@ def search(request):
 
     # Check caching data in database about keyword
     keywords = Keyword.objects.filter(keyword=current_keyword).order_by('reg_date')[:20]
+    tts_for_text = " 오늘 {}에 대한 기사들을 말씀드리겠습니다. \n ".format(current_keyword)
 
     if len(keywords) > 0:
         print("already exist! Use cached item in db")
     else:
         #print(urllib.parse.unquote(current_keyword))
 
-        for summary, link, title, author in gather_rss_async(current_keyword, KEYWORD_MAX_COUNT):
+        for summary, link, title, author in enumerate(gather_rss_async(current_keyword, KEYWORD_MAX_COUNT)):
             obj, created = Keyword.objects.get_or_create(
                 # unique key temporary
                 id = int(time.time() * 100000),
@@ -65,10 +66,18 @@ def search(request):
         # TODO : paging도...
         keywords = Keyword.objects.filter(keyword=current_keyword).order_by('reg_date')
 
+    for i, keyword in enumerate(keywords):
+        tts_for_text += "{} 번쨰 기사는 {} 입니다. \n ".format(order_text_dic[i], keyword.title)
+        tts_for_text += "{} . \n ".format(keyword.summary)
+
+    tts_for_text += "  이상입니다.  애청해 주셔서 감사합니다. \n "
+    tts_for_text = tts_for_text.replace('\n', ' \\n')
+    print(tts_for_text)
     context = {
         'Keywords' : keywords,
         'current_keyword' : current_keyword,
-        'Keywords_len' : len(keywords)
+        'Keywords_len' : len(keywords),
+        'tts_for_text' : tts_for_text
     }
 
     return render(request, 'sum_summary/view.html', context)
@@ -89,6 +98,7 @@ def bookmark_list(request):
 
 @login_required
 def bookmark_register(request):
+    print(request)
     current_keyword = request.POST['current_keyword']
     username = request.POST['username']
     keywords = Keyword.objects.filter(keyword=current_keyword).order_by('reg_date')
