@@ -44,8 +44,7 @@
         console.log(sum_link)
     }
     function basicPopup(id) {
-        var url =  'https://twitter.com/intent/tweet?text='+
-        '[제목]\t'+ $(".customer-title")[id - 1].innerText + '%20%20%20[요약기사]'+$(".customer-author")[id - 1].innerText+'>\n'+$(".customer-text")[id - 1].innerText + '%20%20%20원본URL: '+$(".customer-url")[id - 1].innerText + '%20%20%20[Sum_Speaker_URL]:'+ window.location.href
+        var url =  'https://twitter.com/intent/tweet?text='+'[제목]'+ $(".customer-title")[id - 1].innerText + '%20%20%20[요약기사]'+$(".customer-author")[id - 1].innerText+$(".customer-text")[id - 1].innerText + '%20%20%20원본URL: '+$(".customer-url")[id - 1].innerText + '%20%20%20[Sum_Speaker_URL]:'+ window.location.href
         popupWindow = window.open(url,'popUpWindow','height=500,width=700,left=50,top=50,resizable=yes,scrollbars=yes,toolbar=yes,menubar=no,location=no,directories=no, status=yes')
         console.log(url)    
     }
@@ -93,7 +92,7 @@
                     
                     <!-- Share on Facebook -->
                     <a href="#" onclick="javascript:window.open('https://www.facebook.com/sharer/sharer.php?u='
-                    +encodeURIComponent(document.URL)+'&amp;t='+encodeURIComponent(document.title), 'facebooksharedialog',
+                    +encodeURIComponent(document.URL)+'&t='+encodeURIComponent(document.title), 'facebooksharedialog',
                         'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=600');return false;" target="_blank" alt="Share on Facebook">
                     <img src="{% static 'images/Facebook.png' %}"></a>
                                     
@@ -106,9 +105,7 @@
                     <img src="{% static 'images/Kakao_Story.png' %}"></a>
                     
                     <!-- Share on Naver -->
-                    <a href="#" onclick="javascript:window.open('http://share.naver.com/web/shareView.nhn?url='
-                    +encodeURIComponent(document.URL)+'&amp;title='+encodeURIComponent(document.title),
-                        'naversharedialog', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');return false;" target="_blank" alt="Share on Naver">
+                    <a href="#" onclick="javascript:window.open('http://share.naver.com/web/shareView.nhn?url='+encodeURIComponent(document.URL)+'&amp;title='+encodeURIComponent(document.title),'naversharedialog', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');return false;" target="_blank" alt="Share on Naver">
                     <img src="{% static 'images/Naver.png' %}"></a>
 
                     <!-- Share on KaKao -->
