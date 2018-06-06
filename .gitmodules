@@ -1,0 +1,6 @@
+[submodule "sum_speaker/sum_summary/lexrankr"]
+	path = sum_speaker/sum_summary/lexrankr
+	url = git@github.com:sum-speaker/lexrankr
+[submodule "sum_speaker/sum_summary/textrankr"]
+	path = sum_speaker/sum_summary/textrankr
+	url = git@github.com:sum-speaker/textrankr
